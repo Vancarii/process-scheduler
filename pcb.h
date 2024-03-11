@@ -2,6 +2,7 @@
 #define _PCB_H_
 
 #include <stdbool.h>
+#include "list/list.h"
 
 typedef enum {
     RUNNING,
@@ -22,6 +23,16 @@ typedef struct {
 } PCB;
 
 int next_avail_pid = 0;
+
+// initialize queues
+// extern List* ready_queue_0; // <- highest priority
+// extern List* ready_queue_1;
+// extern List* ready_queue_2;
+
+extern List* ready_queue[3];
+extern List* waiting_reply_queue;
+extern List* waiting_receive_queue;
+
 
 PCB* create_PCB(int priority);
 

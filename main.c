@@ -3,8 +3,11 @@
 #include <string.h>
 
 #include "pcb.h"
+#include "list/list.h"
+
 
 #define MAX_INPUT_LENGTH 100
+
 
 // Forward declarations of functions
 void initializeSimulation();
@@ -46,8 +49,21 @@ int main() {
 }
 
 void initializeSimulation() {
-    // TODO: Implement the initialization of the simulation
 
+    // ready_queue_0 = list_create(); // <- highest priority
+    // ready_queue_1 = list_create();
+    // ready_queue_2 = list_create();
+
+    for (int i = 0; i < 3; i++) {
+        ready_queue[i] = List_create();
+    }
+
+    waiting_receive_queue = List_create();
+    waiting_reply_queue = List_create();
+
+    
+
+    // TODO: Implement the initialization of the simulation
     pcb_init_process();
 }
 
@@ -61,10 +77,10 @@ void handleCommand(char* command) {
          // Handle 'Create' command
             create_process(command);           
             break;
-        case 'F':
+        // case 'F':
             // Handle 'Fork' command
             // fork_process();
-            break;
+            // break;
         // Add cases for other commands
         default:
             printf("\n");
@@ -73,4 +89,9 @@ void handleCommand(char* command) {
 
 void cleanupSimulation() {
     // TODO: Implement cleanup code for the simulation, freeing any allocated resources.
+
+    // cleanup ready queues
+    // List_free(ready_queue_0, freefunction);
+    // List_free(ready_queue_1, freefunction);
+    // List_free(ready_queue_2, freefunction);
 }

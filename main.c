@@ -4,6 +4,7 @@
 
 #include "pcb.h"
 #include "list/list.h"
+#include "commands/create.h"
 
 
 #define MAX_INPUT_LENGTH 100
@@ -54,6 +55,8 @@ void initializeSimulation() {
     // ready_queue_1 = list_create();
     // ready_queue_2 = list_create();
 
+    next_avail_pid = 0;
+
     for (int i = 0; i < 3; i++) {
         ready_queue[i] = List_create();
     }
@@ -75,7 +78,16 @@ void handleCommand(char* command) {
     switch (*command) {
         case 'C':
          // Handle 'Create' command
-            create_process(command);           
+            char params[2];
+            printf("Priority (0 = high ; 1 = normal ; 2 = low): ");
+
+            // size of 2 since 1 integer is expected plus null termination
+            if (fgets(params, 2, stdin) == NULL) {
+            // Handle error or end-of-file
+                break;
+            }
+
+            create_process(command, params);           
             break;
         // case 'F':
             // Handle 'Fork' command

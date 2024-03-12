@@ -1,6 +1,10 @@
 #include "pcb.h"
 #include "commands/create.h"
 #include <stdio.h>
+#include <stdlib.h>
+
+
+int next_avail_pid;
 
 // initialize queues
 List* ready_queue[3];
@@ -34,14 +38,14 @@ PCB *create_PCB(int priority) {
 // - once init process is killed/exited the simulation terminates
 void pcb_init_process(){
 
-    PCB *initProcess = createPCB(0); // Priority 0 for highest priority
+    PCB *initProcess = create_PCB(0); // Priority 0 for highest priority
 
     initProcess->pid = next_avail_pid++;
     initProcess->state = RUNNING;  // The 'init' process starts as running
     initProcess->priority = 0;  // Highest priority
 
     // Store the init process into a queue
-    List_append(&ready_queue[initProcess->priority], initProcess);
+    List_append(ready_queue[initProcess->priority], initProcess);
 
     // Output the creation of the 'init' process
     printf("Init process created with PID %d and priority %d\n", initProcess->pid, initProcess->priority);

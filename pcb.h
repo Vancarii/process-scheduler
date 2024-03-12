@@ -22,7 +22,7 @@ typedef struct {
     char proc_messages[256];
 } PCB;
 
-int next_avail_pid = 0;
+extern int next_avail_pid;
 
 // initialize queues
 // extern List* ready_queue_0; // <- highest priority

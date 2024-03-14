@@ -4,7 +4,7 @@
 
 #include "pcb.h"
 #include "list/list.h"
-#include "commands/create.h"
+#include "commands/commands.h"
 
 
 #define MAX_INPUT_LENGTH 100
@@ -65,10 +65,10 @@ void initializeSimulation() {
     waiting_receive_queue = List_create();
     waiting_reply_queue = List_create();
 
-    
 
     // TODO: Implement the initialization of the simulation
     pcb_init_process();
+
 }
 
 void handleCommand(char* command) {
@@ -79,22 +79,62 @@ void handleCommand(char* command) {
     switch (*command) {
         case 'C':
          // Handle 'Create' command
-            char params[2];
-            printf("Priority (0 = high ; 1 = normal ; 2 = low): ");
+            char pri[2];
+            printf("Enter the priority (0 = high ; 1 = normal ; 2 = low): ");
 
             // size of 2 since 1 integer is expected plus null termination
-            if (fgets(params, 2, stdin) == NULL) {
-            // Handle error or end-of-file
+            if (fgets(pri, 2, stdin) == NULL) {
                 break;
             }
 
-            create_process(command, params);           
+            create_process(pri);           
             break;
-        // case 'F':
+        case 'F':
             // Handle 'Fork' command
             // fork_process();
-            // break;
-        // Add cases for other commands
+            break;
+        case 'K':
+
+            char pid[5];
+            printf("Enter the PID of the process to kill: ");
+
+            if (fgets(pid, 5, stdin) == NULL) {
+                break;
+            }
+
+            kill_process(pid);
+
+            break;
+        case 'E':
+        
+            break;
+        case 'Q':
+        
+            break;
+        case 'S':
+        
+            break;
+        case 'R':
+        
+            break;
+        case 'Y':
+        
+            break;
+        case 'N':
+        
+            break; 
+        case 'P':
+        
+            break;
+        case 'V':
+        
+            break;
+        case 'I':
+        
+            break;
+        case 'T':
+        
+            break;    
         default:
             printf("\n");
     }

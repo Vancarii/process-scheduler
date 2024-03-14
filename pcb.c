@@ -1,5 +1,5 @@
 #include "pcb.h"
-#include "commands/create.h"
+#include "commands/commands.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -7,6 +7,8 @@
 int next_avail_pid;
 
 int init_process_pid;
+
+PCB* current_process;
 
 // initialize queues
 List* ready_queue[3];
@@ -29,6 +31,11 @@ PCB *create_PCB(int priority) {
     return newPCB;
 }
 
+void free_PCB(PCB* pcb) {
+    free(pcb->proc_messages);
+    free(pcb);
+}
+
 
 // There is also a special init process that exists as long as the simulation is running.
 // - init process only runs when no other processes are ready to execute (i.e. all ready queues are
@@ -48,6 +55,9 @@ void pcb_init_process(){
 
     // Store the init process into a queue
     List_append(ready_queue[initProcess->priority], initProcess);
+
+    // set the current running process to the initial process
+    current_process = initProcess;
 
     // Output the creation of the 'init' process
     printf("Init process created with PID %d and priority %d\n", initProcess->pid, initProcess->priority);

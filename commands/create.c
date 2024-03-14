@@ -1,13 +1,12 @@
-#include "create.h"
+#include "commands.h"
 #include <stdio.h>
 
 #include "../pcb.h"
 
 #include <stdlib.h>
 
-#include "../pcb.h"
 
-void create_process(char* command, char* params){
+void create_process(char* params){
 
     // char params[2];
 

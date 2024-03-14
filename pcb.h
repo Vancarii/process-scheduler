@@ -26,6 +26,8 @@ extern int next_avail_pid;
 
 extern int init_process_pid;
 
+extern PCB* current_process;
+
 // initialize queues
 // extern List* ready_queue_0; // <- highest priority
 // extern List* ready_queue_1;
@@ -39,5 +41,7 @@ extern List* waiting_receive_queue;
 PCB* create_PCB(int priority);
 
 void pcb_init_process();
+
+void free_PCB(PCB* pcb);
 
 #endif

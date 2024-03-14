@@ -17,9 +17,13 @@ void cleanupSimulation();
 
 int main() {
     char input[MAX_INPUT_LENGTH];
-    initializeSimulation();
 
     printf("Process Scheduling Simulation\n");
+    
+    initializeSimulation();
+
+    printf("_____________________________________\n");
+    
     printf("Enter command: \n\n'C' for Create\n'F' for Fork\n'K' for Kill\n'E' for Exit\n'Q' for Quantum\n'S' for Send\n'R' for Recieve\n'Y' for Reply\n'N' for New Semaphore\n'P' for Semaphore P\n'V' for Semaphore V\n'I' for ProcInfo\n'T' for TotalInfo\n\nor 'exit' to quit:\n");
 
     while (1) {
@@ -51,11 +55,8 @@ int main() {
 
 void initializeSimulation() {
 
-    // ready_queue_0 = list_create(); // <- highest priority
-    // ready_queue_1 = list_create();
-    // ready_queue_2 = list_create();
-
     next_avail_pid = 0;
+    init_process_pid = 0;
 
     for (int i = 0; i < 3; i++) {
         ready_queue[i] = List_create();

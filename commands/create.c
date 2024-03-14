@@ -23,19 +23,32 @@ void create_process(char* command, char* params){
     
     int priority = atoi(params);
 
-    if (priority == 0) {
-        printf("Priority is high\n");
-    } else if (priority == 1) {
-        printf("Priority is norm\n");
-    } else if (priority == 2) {
-        printf("Priority is low\n");
+    if (priority < 0 || priority > 2) {
+        printf("Invalid priority. Process creation failed.\n");
+        return;
     }
+
+
+    // if (priority == 0) {
+    //     printf("Priority is high\n");
+    // } else if (priority == 1) {
+    //     printf("Priority is norm\n");
+    // } else if (priority == 2) {
+    //     printf("Priority is low\n");
+    // }
 
 
     PCB* new_pcb = create_PCB(priority);
 
     // enqueue to the list
 
-    List_append(ready_queue[priority], new_pcb);
+    if (List_append(ready_queue[priority], new_pcb) == -1) {
+        printf("Failed to append process %d to ready queue with priority %d\n", new_pcb->pid, new_pcb->priority);
+        return;
+    } else {
+        printf("Process created with PID %d and priority %d\n", new_pcb->pid, new_pcb->priority);
+    }
+
+    printf("ready queue [%d] count: %d\n", new_pcb->priority, ready_queue[priority]->count);
 
 }

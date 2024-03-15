@@ -5,17 +5,11 @@
 
 #include <stdlib.h>
 
-
+// we will be adding processes to the front of the list and 
+// removing processes from the end of the list
+// this way we can use List_prepend with List_last and List_trim easily
+// and the List_curr pointer will point to the last item, being the current running process
 void create_process(char* params){
-
-    // char params[2];
-
-    // printf("Priority (0 = high ; 1 = normal ; 2 = low): ");
-
-    // // size of 2 since 1 integer is expected plus null termination
-    // if (fgets(params, 2, stdin) == NULL) {
-    // // Handle error or end-of-file
-    // }
 
     int c;  
     while ((c = getchar()) != '\n' && c != EOF) { }
@@ -27,25 +21,15 @@ void create_process(char* params){
         return;
     }
 
-
-    // if (priority == 0) {
-    //     printf("Priority is high\n");
-    // } else if (priority == 1) {
-    //     printf("Priority is norm\n");
-    // } else if (priority == 2) {
-    //     printf("Priority is low\n");
-    // }
-
-
     PCB* new_pcb = create_PCB(priority);
 
-    // enqueue to the list
-
+    // enqueue to the end of the list
     if (List_append(ready_queue[priority], new_pcb) == -1) {
         printf("Failed to append process %d to ready queue with priority %d\n", new_pcb->pid, new_pcb->priority);
         return;
     } else {
-        printf("Process created with PID %d and priority %d\n", new_pcb->pid, new_pcb->priority);
+        current_process = find_next_process();
+        printf("Process created with PID [%d] and priority %d\n", new_pcb->pid, new_pcb->priority);
     }
 
     printf("ready queue [%d] count: %d\n", new_pcb->priority, ready_queue[priority]->count);

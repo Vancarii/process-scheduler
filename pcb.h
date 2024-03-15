@@ -39,6 +39,8 @@ extern List* waiting_receive_queue;
 
 void print_all_queues();
 
+PCB* find_next_process();
+
 List* get_queue(int pid);
 
 PCB* create_PCB(int priority);

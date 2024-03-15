@@ -13,6 +13,22 @@ List* ready_queue[3];
 List* waiting_reply_queue;
 List* waiting_receive_queue;
 
+PCB* find_next_process() {
+    PCB* next_process = NULL;
+    for (int i = 0; i < 3; i++) {
+        if (ready_queue[i]->count > 0) {
+            next_process = List_first(ready_queue[i]);
+            break;
+        }
+    }
+    if (next_process == NULL){
+        printf("No processes in any of the ready queues\n");
+    } else {
+        current_process->state = RUNNING;
+    }
+    return next_process;
+}
+
 void print_all_queues() {
     List* q_print;
     PCB* pcb;
@@ -42,6 +58,12 @@ void print_all_queues() {
         printf("PID: %d, Priority: %d\n", pcb->pid, pcb->priority);
         List_next(q_print);
     }
+
+    List_first(ready_queue[0]);
+    List_first(ready_queue[1]);
+    List_first(ready_queue[2]);
+    List_first(waiting_reply_queue);
+    List_first(waiting_receive_queue);
 }
 
 bool find_pid(void* curr_PCB, void* comparisonArg) {
@@ -58,7 +80,7 @@ List* get_queue(int pid) {
 
     List* target_queue;
 
-    // make list point to first element of the ready queue
+    // make list point to last element of the queue
     List_first(ready_queue[0]);
     List_first(ready_queue[1]);
     List_first(ready_queue[2]);

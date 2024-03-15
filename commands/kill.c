@@ -56,7 +56,21 @@ void kill_process(char* pid_c) {
 
     if (target_queue != NULL) {
         PCB* removed_proc = List_remove(target_queue);
+        // sets the queues curr pointer to the start of the list
+        current_process = find_next_process();
         free_PCB(removed_proc);
+
+        // check for init
+        if (pid == 1) {
+            printf("Initial process pid entered.\n");
+            //CHECK FOR IF ALL QUEUES ARE EMPTY
+            if (current_process == NULL){
+                printf("All ready queues are empty. Initial Process killed. Simulation terminated.\n");
+                // cleanup
+                exit(0);
+            }
+            return;
+        }
         printf("Process %d has been successfully killed.\n", pid);
         // return;
     } else {

@@ -41,10 +41,7 @@ int main() {
             break;
         }
 
-        // Handle the command
-        char command = input[0];
-
-        handleCommand(&command);
+        handleCommand(input);
     }
 
     cleanupSimulation();
@@ -63,11 +60,18 @@ void initializeSimulation() {
 void handleCommand(char* command) {
     // char params[2];
 
+    // Check if the command string is exactly 1 character long
+    if (strlen(command) != 1) {
+        printf("Invalid command. Please enter a single character command.\n");
+        return;
+    }
+
     // TODO: Based on the command character, call the appropriate function to handle it.
     // This will involve parsing the params as needed for each command.
     switch (*command) {
         case 'C':
          // Handle 'Create' command
+            puts("Creating a new process...");
             char pri[2];
             printf("Enter the priority (0 = high ; 1 = normal ; 2 = low): ");
 
@@ -79,11 +83,12 @@ void handleCommand(char* command) {
             create_process(pri);           
             break;
         case 'F':
+            puts("Forking the current process...");
             // Handle 'Fork' command
             // fork_process();
             break;
         case 'K':
-
+            puts("Killing a process...");
             char pid[5];
             printf("Enter the PID of the process to kill: ");
 
@@ -95,9 +100,11 @@ void handleCommand(char* command) {
 
             break;
         case 'E':
+            puts("Exiting the currently running process...");
             exit_process();
             break;
         case 'Q':
+            puts("Time Quantum is over! Current process is being pre-empted...");
             quantum_command();   
             break;
         case 'S':
@@ -125,7 +132,7 @@ void handleCommand(char* command) {
         
             break;    
         default:
-            printf("\n");
+            printf("command not found. Please enter command from the list above.\n");
     }
 }
 

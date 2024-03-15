@@ -9,4 +9,6 @@ void exit_process();
 
 void quantum_command();
 
+void proc_info_command(char* pid_c);
+
 #endif

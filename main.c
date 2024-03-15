@@ -126,6 +126,18 @@ void handleCommand(char* command) {
         
             break;
         case 'I':
+            puts("Retrieving process info...");
+            char pid_i[2];
+            printf("enter the process pid: ");
+
+            // size of 2 since 1 integer is expected plus null termination
+            if (fgets(pid_i, 2, stdin) == NULL) {
+                break;
+            }
+            proc_info_command(pid_i);
+
+                        int ch;
+            while ((ch = getchar()) != '\n' && ch != EOF);
         
             break;
         case 'T':

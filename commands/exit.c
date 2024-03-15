@@ -26,6 +26,9 @@ void exit_process(){
         printf("Process %d is not in any queue. Failed to exit process.\n", current_process->pid);
     }
 
+    // have the current process point to the next process in the queue
+    current_process = List_first(ready_queue[0]);
+
     // print_all_queues();
 
     // if all queues are empty, exit the program

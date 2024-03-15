@@ -98,7 +98,7 @@ void handleCommand(char* command) {
             exit_process();
             break;
         case 'Q':
-        
+            quantum_command();   
             break;
         case 'S':
         

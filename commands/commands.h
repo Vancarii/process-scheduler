@@ -7,4 +7,6 @@ void kill_process(char* pid_c);
 
 void exit_process();
 
+void quantum_command();
+
 #endif

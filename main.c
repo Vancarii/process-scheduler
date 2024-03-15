@@ -95,7 +95,7 @@ void handleCommand(char* command) {
 
             break;
         case 'E':
-        
+            exit_process();
             break;
         case 'Q':
         

@@ -55,17 +55,6 @@ int main() {
 
 void initializeSimulation() {
 
-    next_avail_pid = 0;
-    init_process_pid = 0;
-
-    for (int i = 0; i < 3; i++) {
-        ready_queue[i] = List_create();
-    }
-
-    waiting_receive_queue = List_create();
-    waiting_reply_queue = List_create();
-
-
     // TODO: Implement the initialization of the simulation
     pcb_init_process();
 

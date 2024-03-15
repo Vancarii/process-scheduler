@@ -37,6 +37,7 @@ extern List* ready_queue[3];
 extern List* waiting_reply_queue;
 extern List* waiting_receive_queue;
 
+void print_all_queues();
 
 PCB* create_PCB(int priority);
 

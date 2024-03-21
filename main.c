@@ -141,7 +141,8 @@ void handleCommand(char* command) {
         
             break;
         case 'T':
-        
+            puts("Retrieving total info...");
+            total_info_command();
             break;    
         default:
             printf("command not found. Please enter command from the list above.\n");

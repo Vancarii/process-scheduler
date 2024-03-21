@@ -11,4 +11,6 @@ void quantum_command();
 
 void proc_info_command(char* pid_c);
 
+void total_info_command();
+
 #endif

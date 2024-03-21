@@ -13,6 +13,8 @@ List* ready_queue[3];
 List* waiting_reply_queue;
 List* waiting_receive_queue;
 
+// find the next process to run
+// if there are no processes in any of the ready queues, return NULL
 PCB* find_next_process() {
     PCB* next_process = NULL;
     for (int i = 0; i < 3; i++) {
@@ -29,7 +31,22 @@ PCB* find_next_process() {
     return next_process;
 }
 
-void print_all_queues() {
+static void print_process_info(PCB* pcb){
+    printf("\nPID: %d\n", pcb->pid);
+    printf("Priority: %d\n", pcb->priority);
+
+    if (pcb->state == 0){
+        printf("State: Running\n");
+    } else if (pcb->state == 1){
+        printf("State: Ready\n");
+    } else if (pcb->state == 2){
+        printf("State: Blocked\n");
+    } else {
+        printf("State: Unknown\n");
+    }
+}
+
+void print_all_processes() {
     List* q_print;
     PCB* pcb;
     for (int i = 0; i < 3; i++) {
@@ -37,16 +54,19 @@ void print_all_queues() {
         printf("Ready Queue %d\n", i);
         List_first(q_print);
         while ((pcb = List_curr(q_print)) != NULL) {
-            printf("PID: %d, Priority: %d\n", pcb->pid, pcb->priority);
+            // printf("PID: %d, Priority: %d\n", pcb->pid, pcb->priority);
+            print_process_info(pcb);
+            
             List_next(q_print);
         }
     }
+
     printf("Waiting Reply Queue\n");
     q_print = waiting_reply_queue;
     List_first(q_print);
     // PCB* pcb;
     while ((pcb = List_curr(q_print)) != NULL) {
-        printf("PID: %d, Priority: %d\n", pcb->pid, pcb->priority);
+        print_process_info(pcb);
         List_next(q_print);
     }
 
@@ -55,7 +75,7 @@ void print_all_queues() {
     List_first(q_print);
     // PCB* pcb;
     while ((pcb = List_curr(q_print)) != NULL) {
-        printf("PID: %d, Priority: %d\n", pcb->pid, pcb->priority);
+        print_process_info(pcb);
         List_next(q_print);
     }
 
@@ -80,7 +100,7 @@ List* get_queue(int pid) {
 
     List* target_queue;
 
-    // make list point to last element of the queue
+    // make list point to first element of the queue
     List_first(ready_queue[0]);
     List_first(ready_queue[1]);
     List_first(ready_queue[2]);

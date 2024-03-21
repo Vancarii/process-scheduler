@@ -5,9 +5,9 @@
 #include <stdlib.h>
 
 
-void exit_process(){
+// if only process is init process, then exit causes seg fault
 
-    // bool is_init_process = false;
+void exit_process(){
 
     printf("currently running process: %d\n", current_process->pid);
 

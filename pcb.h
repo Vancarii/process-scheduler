@@ -37,7 +37,9 @@ extern List* ready_queue[3];
 extern List* waiting_reply_queue;
 extern List* waiting_receive_queue;
 
-void print_all_queues();
+// static void print_process_info(PCB* pcb);
+
+void print_all_processes();
 
 PCB* find_next_process();
 

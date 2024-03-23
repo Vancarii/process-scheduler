@@ -45,6 +45,8 @@ void print_all_processes();
 
 PCB* find_next_process();
 
+int enqueue_process(PCB* process);
+
 List* get_queue(int pid);
 
 PCB* create_PCB(int priority);

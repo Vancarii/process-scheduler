@@ -30,7 +30,7 @@ void recieve_command();
 // char *msg (nullterminated message string, 40 char max)
 // action: unblocks sender and delivers reply
 // reports success or failure
-void reply_command();
+void reply_command(char* pid_c, char* msg);
 
 
 #endif

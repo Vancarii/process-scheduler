@@ -87,6 +87,22 @@ void print_all_processes() {
     List_first(waiting_receive_queue);
 }
 
+int enqueue_process(PCB* process) {
+
+    for (int i = 0; i < 3; i++) {
+        if (List_append(ready_queue[i], process) == 0) {
+            printf("Process %d enqueued in ready queue %d\n", process->pid, i);
+            process->state = READY;
+            return i;
+        }
+    }
+
+    printf("Failed to enqueue process %d in any ready queue\n", process->pid);
+
+    return -1;
+
+}
+
 bool find_pid(void* curr_PCB, void* comparisonArg) {
     PCB* pcb = curr_PCB;
     int* pid = (int*)comparisonArg;

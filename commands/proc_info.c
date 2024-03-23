@@ -4,7 +4,6 @@
 #include <stdlib.h>
 
 
-
 void proc_info_command(char* pid_c) {
 
     int pid = atoi(pid_c);

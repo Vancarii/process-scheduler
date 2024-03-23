@@ -26,7 +26,7 @@ PCB* find_next_process() {
     if (next_process == NULL){
         printf("No processes in any of the ready queues\n");
     } else {
-        current_process->state = RUNNING;
+        next_process->state = RUNNING;
     }
     return next_process;
 }
@@ -44,6 +44,7 @@ static void print_process_info(PCB* pcb){
     } else {
         printf("State: Unknown\n");
     }
+    printf("Message: %s\n", pcb->proc_messages);
 }
 
 void print_all_processes() {
@@ -115,7 +116,7 @@ List* get_queue(int pid) {
 
     // int pid = atoi(pid_c);
 
-     // search through all ready queues to find the process to kill
+     // search through all ready queues to find the process
     PCB* found_process = NULL;
 
     int i = 0;
@@ -154,7 +155,13 @@ PCB *create_PCB(int priority) {
     newPCB->pid = next_avail_pid++;
     newPCB->state = READY;
     newPCB->priority = priority;
-    newPCB->proc_messages = ((char*) calloc(256, sizeof(char)));
+    newPCB->proc_messages = ((char*) malloc(41 * sizeof(char)));
+    if (newPCB->proc_messages == NULL) {
+        fprintf(stderr, "Failed to allocate memory for PCB messages\n");
+        exit(1);
+    }
+
+    newPCB->proc_messages[0] = '\0';
 
     return newPCB;
 }

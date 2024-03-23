@@ -22,6 +22,8 @@ typedef struct {
     char* proc_messages;
 } PCB;
 
+#define PROC_MESSAGES_SIZE 41
+
 extern int next_avail_pid;
 
 extern int init_process_pid;

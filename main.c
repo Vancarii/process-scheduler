@@ -108,12 +108,47 @@ void handleCommand(char* command) {
             quantum_command();   
             break;
         case 'S':
+            // puts("sending a message...");
+            char pid_send[5];
+            printf("Enter the PID of the process to send a message to: ");
+
+            if (fgets(pid_send, 5, stdin) == NULL) {
+                break;
+            }
+
+            char send_msg[41];
+            printf("Enter your message (max. 40 characters): ");
+
+            if (fgets(send_msg, 41, stdin) == NULL) {
+                break;
+            }
+
+            send_command(pid_send, send_msg);
         
             break;
         case 'R':
+
+            recieve_command();
         
             break;
         case 'Y':
+
+            // puts("sending a message...");
+            char pid_reply[5];
+            printf("Enter the PID of the process to send a message to: ");
+
+            if (fgets(pid_reply, 5, stdin) == NULL) {
+                break;
+            }
+
+            char reply_msg[41];
+            printf("Enter your message (max. 40 characters): ");
+
+            if (fgets(reply_msg, 41, stdin) == NULL) {
+                break;
+            }
+
+            reply_command(pid_reply, reply_msg);
         
             break;
         case 'N':
@@ -136,7 +171,7 @@ void handleCommand(char* command) {
             }
             proc_info_command(pid_i);
 
-                        int ch;
+            int ch;
             while ((ch = getchar()) != '\n' && ch != EOF);
         
             break;

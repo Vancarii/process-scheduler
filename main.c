@@ -182,6 +182,9 @@ void handleCommand(char* command) {
                 break;
             }
 
+            int ch_p;
+            while ((ch_p = getchar()) != '\n' && ch_p != EOF);
+
             semaphore_p_command(sem_p_id);
         
             break;
@@ -193,6 +196,9 @@ void handleCommand(char* command) {
             if (fgets(sem_v_id, 2, stdin) == NULL) {
                 break;
             }
+
+            int ch_v;
+            while ((ch_v = getchar()) != '\n' && ch_v != EOF);
 
             semaphore_v_command(sem_v_id);
         

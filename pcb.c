@@ -25,6 +25,7 @@ PCB* find_next_process() {
     }
     if (next_process == NULL){
         printf("No processes in any of the ready queues\n");
+        return NULL;
     } else {
         next_process->state = RUNNING;
     }
@@ -32,7 +33,8 @@ PCB* find_next_process() {
 }
 
 static void print_process_info(PCB* pcb){
-    printf("\nPID: %d\n", pcb->pid);
+    printf("________________________\n");
+    printf("PID: %d\n", pcb->pid);
     printf("Priority: %d\n", pcb->priority);
 
     if (pcb->state == 0){
@@ -45,6 +47,7 @@ static void print_process_info(PCB* pcb){
         printf("State: Unknown\n");
     }
     printf("Message: %s\n", pcb->proc_messages);
+    printf("________________________\n\n");
 }
 
 void print_all_processes() {
@@ -52,7 +55,7 @@ void print_all_processes() {
     PCB* pcb;
     for (int i = 0; i < 3; i++) {
         q_print = ready_queue[i];
-        printf("Ready Queue %d\n", i);
+        printf("\nReady Queue %d\n", i);
         List_first(q_print);
         while ((pcb = List_curr(q_print)) != NULL) {
             // printf("PID: %d, Priority: %d\n", pcb->pid, pcb->priority);
@@ -93,6 +96,7 @@ int enqueue_process(PCB* process) {
         if (List_append(ready_queue[i], process) == 0) {
             printf("Process %d enqueued in ready queue %d\n", process->pid, i);
             process->state = READY;
+            process->priority = i;
             return i;
         }
     }

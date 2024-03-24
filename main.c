@@ -152,12 +152,46 @@ void handleCommand(char* command) {
         
             break;
         case 'N':
+
+            char sem_id[2];
+            printf("Enter the semaphore id (0 to 4): ");
+
+            if (fgets(sem_id, 2, stdin) == NULL) {
+                break;
+            }
+
+            char sem_val[10];
+            printf("Enter your semaphore initial value (0 or higher): ");
+
+            if (fgets(sem_val, 10, stdin) == NULL) {
+                break;
+            }
+
+            new_semaphore_command(sem_id, sem_val);
         
             break; 
         case 'P':
+
+            char sem_p_id[2];
+            printf("Enter the semaphore id (0 to 4): ");
+
+            if (fgets(sem_p_id, 2, stdin) == NULL) {
+                break;
+            }
+
+            semaphore_p_command(sem_p_id);
         
             break;
         case 'V':
+
+            char sem_v_id[2];
+            printf("Enter the semaphore id (0 to 4): ");
+
+            if (fgets(sem_v_id, 2, stdin) == NULL) {
+                break;
+            }
+
+            semaphore_v_command(sem_v_id);
         
             break;
         case 'I':

@@ -8,6 +8,8 @@ int next_avail_pid;
 int init_process_pid;
 PCB* current_process;
 
+PCB* init_process;
+
 // initialize queues
 List* ready_queue[3];
 List* waiting_reply_queue;
@@ -92,6 +94,11 @@ void print_all_processes() {
     List_first(waiting_receive_queue);
 }
 
+// finds a queue to place process
+// used when processes are unblocked, and are put back onto the ready queues
+// the only difference than List_append is that we dont know which queue the process
+// is going in, so we try all 3 from the highest priority until it can go in
+// returns the queue it was placed in
 int enqueue_process(PCB* process) {
 
     for (int i = 0; i < 3; i++) {
@@ -222,24 +229,12 @@ void pcb_init_process(){
     waiting_receive_queue = List_create();
     waiting_reply_queue = List_create();
 
-    PCB *initProcess = create_PCB(0); // Priority 0 for highest priority
-
-    initProcess->pid = init_process_pid;
-    initProcess->state = RUNNING;  // The 'init' process starts as running
-    // initProcess->priority = 0;  // Highest priority
-
-    // Store the init process into a queue
-    
-    if (List_append(ready_queue[initProcess->priority], initProcess) == -1) {
-        printf("Failed to append initial process to highest ready queue\n");
-        return;
-    } else {
-        printf("Init process created with PID %d and priority %d\n", initProcess->pid, initProcess->priority);
-    }
-
+    // create the initial process and save the pid
+    init_process = create_PCB(0);
+    init_process->pid = init_process_pid;
 
     // set the current running process to the initial process
-    current_process = initProcess;
+    // current_process = initProcess;
 
     // Output the creation of the 'init' process
 

@@ -5,10 +5,7 @@
 
 #include <stdlib.h>
 
-// we will be adding processes to the front of the list and 
-// removing processes from the end of the list
-// this way we can use List_prepend with List_last and List_trim easily
-// and the List_curr pointer will point to the last item, being the current running process
+
 void create_process(char* params){
 
     int c;  

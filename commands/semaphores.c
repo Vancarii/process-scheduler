@@ -40,6 +40,8 @@ void new_semaphore_command(char* semaphore_id, char* initial_value) {
 // action taken (blocked or not) as well as success or failure.
 void semaphore_p_command(char* semaphore_id) {
 
+    // do checks for the init process
+
     int semID = atoi(semaphore_id);
 
     if (semID > 4){
@@ -69,6 +71,10 @@ void semaphore_p_command(char* semaphore_id) {
 // action taken (whether/which process was readied) as well as
 // success or failure.
 void semaphore_v_command(char* semaphore_id) {
+
+    // do checks for the init process
+
+    
     int semID = atoi(semaphore_id);
 
     if (semID > 4){

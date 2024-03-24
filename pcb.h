@@ -41,6 +41,8 @@ extern int init_process_pid;
 
 extern PCB* current_process;
 
+extern PCB* init_process;
+
 // initialize queues
 // extern List* ready_queue_0; // <- highest priority
 // extern List* ready_queue_1;
@@ -51,6 +53,8 @@ extern List* waiting_reply_queue;
 extern List* waiting_receive_queue;
 
 // static void print_process_info(PCB* pcb);
+
+bool find_pid(void* curr_PCB, void* comparisonArg);
 
 void print_all_processes();
 

@@ -22,6 +22,17 @@ typedef struct {
     char* proc_messages;
 } PCB;
 
+//  semaphore data struct
+// A list of processes waiting on that semaphore
+typedef struct sem {
+    int sem;
+    List* waited_processes; 
+} sem;
+
+extern sem semaphores[5];
+
+#define UNUSED_SEMAPHORE -999
+
 #define PROC_MESSAGES_SIZE 41
 
 extern int next_avail_pid;

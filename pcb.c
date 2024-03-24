@@ -13,6 +13,8 @@ List* ready_queue[3];
 List* waiting_reply_queue;
 List* waiting_receive_queue;
 
+sem semaphores[5];
+
 // find the next process to run
 // if there are no processes in any of the ready queues, return NULL
 PCB* find_next_process() {
@@ -201,6 +203,11 @@ void free_PCB(PCB* pcb) {
 // on any ready queue or any blocked queue)
 // - once init process is killed/exited the simulation terminates
 void pcb_init_process(){
+
+    // initialize semaphores all to unused
+    for (int i = 0; i < 5; i++){
+        semaphores[i].sem = UNUSED_SEMAPHORE;
+    }
 
     next_avail_pid = 1;
 

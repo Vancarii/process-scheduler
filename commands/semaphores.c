@@ -13,6 +13,26 @@
 //  action taken as well as success or failure.
 void new_semaphore_command(char* semaphore_id, char* initial_value) {
 
+    // null check
+    if (initial_value == NULL || initial_value[0] == '\0') {
+        printf("Initial value is empty\n");
+        return;
+    }
+
+    // convert string to int
+    int initVal = atoi(initial_value);
+    int semID = atoi(semaphore_id);
+
+    if (semID > 4){
+        printf("Semaphore number %d is not between values 0-4. Please try again.\n", semID);
+    }
+    else if (semaphores[semID].sem == UNUSED_SEMAPHORE) {
+        semaphores[semID].sem = initVal;
+        semaphores[semID].waited_processes = List_create();
+        printf("Semaphore %d is successfully initialized to %d.\n", semID, initVal);
+    } else
+        printf("Semaphore %d is already in use.\n", semID);
+
 }
 
 // execute the semaphore P operation on behalf of the running process. You can

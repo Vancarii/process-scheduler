@@ -160,6 +160,9 @@ void handleCommand(char* command) {
                 break;
             }
 
+            int ch_n;
+            while ((ch_n = getchar()) != '\n' && ch_n != EOF);
+
             char sem_val[10];
             printf("Enter your semaphore initial value (0 or higher): ");
 

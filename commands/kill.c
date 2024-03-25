@@ -50,9 +50,7 @@ void kill_process(char* pid_c) {
 
             printf("All ready queues are empty. Initial Process killed. Simulation terminated.\n");
 
-
-            // PERFORM THOROUGH CLEANUP
-            free_PCB(init_process);
+            terminate_simulation();
             exit(0);
         } else {
             printf("ready queues not empty, cannot kill init process yet.\n");

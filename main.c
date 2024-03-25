@@ -66,14 +66,13 @@ int main() {
     }
 
     cleanupSimulation();
-    printf("Simulation ended.\n");
+    printf("Simulation terminated.\n");
 
     return 0;
 }
 
 void initializeSimulation() {
 
-    // TODO: Implement the initialization of the simulation
     pcb_init_process();
 
 }
@@ -249,10 +248,7 @@ void handleCommand(char* command) {
 }
 
 void cleanupSimulation() {
-    // TODO: Implement cleanup code for the simulation, freeing any allocated resources.
 
-    // cleanup ready queues
-    // List_free(ready_queue_0, freefunction);
-    // List_free(ready_queue_1, freefunction);
-    // List_free(ready_queue_2, freefunction);
+    terminate_simulation();
+
 }

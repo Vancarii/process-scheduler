@@ -69,6 +69,8 @@ PCB* create_PCB(int priority);
 
 void pcb_init_process();
 
-void free_PCB(PCB* pcb);
+void free_PCB(void* pcb);
+
+void terminate_simulation();
 
 #endif

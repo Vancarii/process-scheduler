@@ -25,6 +25,7 @@ void exit_process(){
     if (current_process == init_process){
               
         // checks to see if there are no processes at all in the simulation
+        // queues are for sure empty since current is init process
         for (int i = 0; i < 5; i++) {
             if (semaphores[i].waited_processes != NULL &&
                         semaphores[i].waited_processes->count > 0) 
@@ -39,10 +40,11 @@ void exit_process(){
         }
 
 
-        // cleanup and exit
-        free_PCB(init_process);
         printf("Init program successfully exited. Simulation now terminated.\n");
+
+        terminate_simulation();
         exit(0);
+       
 
 
     } else {

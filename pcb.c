@@ -244,9 +244,29 @@ PCB *create_PCB(int priority) {
     return newPCB;
 }
 
-void free_PCB(PCB* pcb) {
-    free(pcb->proc_messages);
-    free(pcb);
+void free_PCB(void* pcb) {
+    PCB* process = (PCB*) pcb;
+    free(process->proc_messages);
+    free(process);
+}
+
+void terminate_simulation() {
+
+    // Freeing lists
+    for (int i = 0; i < 3; i++) {
+        List_free(ready_queue[i], free_PCB);
+    }
+
+    for (int i = 0; i < 5; i++) {
+        if (semaphores[i].sem != UNUSED_SEMAPHORE){
+            List_free(semaphores[i].waited_processes, free_PCB);
+        }
+    }
+    List_free(waiting_receive_queue, free_PCB);
+    List_free(waiting_reply_queue, free_PCB);
+
+    free_PCB(init_process);
+
 }
 
 
@@ -284,9 +304,6 @@ void pcb_init_process(){
 
     current_process = init_process;
     current_process->state = RUNNING;
-    // set the current running process to the initial process
-    // current_process = initProcess;
 
-    // Output the creation of the 'init' process
 
 }

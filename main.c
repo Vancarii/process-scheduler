@@ -159,6 +159,7 @@ void handleCommand(char* command) {
         
             break;
         case 'R':
+            puts("Checking for incoming messages...");
 
             recieve_command();
         

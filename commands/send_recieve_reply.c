@@ -5,7 +5,11 @@
 #include <string.h>
 
 // current decision is to not allow any process to send more than one message
-// also we assume that we cannot send messages to blocked processes
+
+// if the send command targets a process in the waiting recieve queue, 
+// the waiting process will get unblocked and enqueued to the right queue
+// but does not recieve the message until it gets the cpu and starts running
+// the sender gets blocked on the waiting reply queue
 
 // parameters
 // pid (pid of process to send message to), 
@@ -40,10 +44,7 @@ void send_command(char* pid_c, char* msg) {
             init_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';
             printf("Message sent to init process with message: %s\n", init_process->proc_messages);
             return;
-        } else {
-            printf("No processes in any ready queue. Failed to send message to pid: %d\n", pid);
-            return;
-        }
+        } 
 
     } 
 
@@ -62,17 +63,15 @@ void send_command(char* pid_c, char* msg) {
     } else {
         found_process = List_curr(target_queue);
     }
-    // else if (target_queue == waiting_receive_queue){
-    //     printf("Process with PID %d is in the waiting receive queue\n", pid);
-    //     // unblock the process from waiting queue
-    //     if ((found_process = List_remove(waiting_receive_queue)) != NULL) {
-    //         int queue_num = enqueue_process(found_process);
-    //         printf("Process with PID %d unblocked from waiting receive queue and enqueued in ready queue %d\n", pid, queue_num);
-    //     }
-    // } 
-    // else if (target_queue == waiting_reply_queue){
-    //     printf("Process with PID %d is in the waiting reply queue\n", pid);
-    // }
+
+    if (target_queue == waiting_receive_queue){
+        printf("Process with PID %d is in the waiting receive queue\n", pid);
+        // unblock the process from waiting queue
+        if ((found_process = List_remove(waiting_receive_queue)) != NULL) {
+            int queue_num = enqueue_process(found_process);
+            printf("Process with PID %d unblocked from waiting receive queue and enqueued in ready queue %d\n", pid, queue_num);
+        }
+    } 
 
 
     if (found_process != NULL) {
@@ -137,8 +136,12 @@ void recieve_command() {
 
         // block and put into waiting queue
         List_append(waiting_receive_queue, current_process);
+
+        printf("Process with pid %d has no incoming messages. Blocked on Waiting Recieve Queue.\n", current_process->pid);
         
         current_process = find_next_process();
+
+        printf("Next process with pid %d now gets CPU.\n", current_process->pid);
     }
 
 }
@@ -185,7 +188,7 @@ void reply_command(char* pid_c, char* msg) {
             strncpy(found_process->proc_messages, msg, PROC_MESSAGES_SIZE - 1);
             found_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';
             printf("Reply sent to sender process with PID %d with message: %s\n", pid, found_process->proc_messages);
-            printf("Process unblocked and placed into ready queue. Previous process continues execution.\n");
+            printf("Process unblocked and placed into ready queue. Previous process continues execution unless it was init process.\n");
         }
 
     } 

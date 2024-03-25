@@ -3,6 +3,7 @@
 #include "../pcb.h"
 #include "commands.h"
 #include <stdlib.h>
+#include <string.h>
 
 
 void exit_process(){
@@ -21,6 +22,24 @@ void exit_process(){
     // find the process and queue that current process is in
     // remove it from the queue
     // free the process
+
+    // // check if there are any incoming messages
+    // if (current_process->proc_messages[0] != '\0'){
+    //     char y_n[2];
+    //     printf("\033[0;33m");
+    //     printf("PROCESS HAS INCOMING MESSAGES. ARE YOU SURE YOU WANT TO EXIT? (Y/N): ");
+    //     printf("\033[0;0m");
+
+    //     // size of 2 since 1 integer is expected plus null termination
+    //     if (fgets(y_n, 2, stdin) == NULL) {
+    //         puts("invalid input\n");
+    //     }
+
+    //     if (strcmp(y_n, "N") == 0){
+    //         return;
+    //     }
+
+    // }
 
     if (current_process == init_process){
               

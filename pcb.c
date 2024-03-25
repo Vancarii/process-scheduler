@@ -54,7 +54,7 @@ void print_process_info(PCB* pcb){
         printf("State: Blocked | ");
     } 
 
-    printf("Message: %s\n", pcb->proc_messages);
+    printf("Incoming Message: %s\n", pcb->proc_messages);
     printf("--------------------------------------------------------------------\n");
 }
 

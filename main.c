@@ -156,7 +156,7 @@ void handleCommand(char* command) {
 
             // puts("sending a message...");
             char pid_reply[5];
-            printf("Enter the PID of the process to send a message to: ");
+            printf("Enter the PID of the process to reply to: ");
 
             if (fgets(pid_reply, 5, stdin) == NULL) {
                 break;

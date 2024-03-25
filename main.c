@@ -85,7 +85,7 @@ void handleCommand(char* command) {
         case 'F':
             puts("Forking the current process...");
             // Handle 'Fork' command
-            // fork_process();
+            fork_process();
             break;
         case 'K':
             puts("Killing a process...");

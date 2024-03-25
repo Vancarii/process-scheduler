@@ -10,6 +10,20 @@
 // reports action taken as well as success or failure
 void kill_process(char* pid_c) {
 
+    
+    // pseudo code:
+    
+    // look for process
+    // check if target is init process
+    // if it is, then check if all queues are empty
+        // if they are, then kill the init process and exit the program
+        // else print error since cannot kill init yet
+    // else if target is not init process
+        // search for the process in all queues
+        // if found, remove it from the queue and free the memory
+        // find the next process to run
+        // if not found, print error message
+
     int pid = atoi(pid_c);
 
     // check if target is init process
@@ -28,7 +42,7 @@ void kill_process(char* pid_c) {
                     return;
                 }
             }
-            
+
             if (waiting_receive_queue->count > 0 || waiting_reply_queue->count > 0) {
                 printf("Waiting receive queue has blocked processes. Cannot exit.\n");
                 return;
@@ -71,59 +85,6 @@ void kill_process(char* pid_c) {
         printf("Process %d has been successfully killed.\n", pid);
 
     }
-
-
-    // look for process
-    // check if target is init process
-    // if it is, then check if all queues are empty
-        // if they are, then kill the init process and exit the program
-        // else print error since cannot kill init yet
-    // else if target is not init process
-        // search for the process in all queues
-        // if found, remove it from the queue and free the memory
-        // find the next process to run
-        // if not found, print error message
-
-
-
-    // // check if current is init process
-    // if (pid == init_process_pid) {
-    //     printf("Initial process pid entered.\n");
-    //     //CHECK FOR IF ALL QUEUES ARE EMPTY
-    //     if (current_process == NULL){
-    //         printf("All ready queues are empty. Initial Process killed. Simulation terminated.\n");
-    //         // cleanup
-    //         exit(0);
-    //     }
-    //     return;
-    // }
-
-    // // queues current pointer should already be pointing at the target process
-    // List* target_queue = get_queue(pid);
-
-    // if (target_queue != NULL) {
-    //     PCB* removed_proc = List_remove(target_queue);
-
-    //     // find the next process to run
-    //     // returns null if there are no other processes
-    //     // runs the init process if there are no other processes
-    //     current_process = find_next_process();
-    //     if (current_process == NULL){
-    //         printf("No other processes in the ready queues. Running init process...\n");
-    //         current_process = init_process;
-    //     }
-
-    //     free_PCB(removed_proc);
-
-
-    //     printf("Process %d has been successfully killed.\n", pid);
-    //     // return;
-    // } else {
-    //     printf("Process %d not found. Failed to kill process.\n", pid);
-    //     // return;
-    // }
-
-    // // print_all_queues();
 
     return;
 

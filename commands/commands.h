@@ -3,6 +3,8 @@
 
 void create_process(char* params);
 
+void fork_process();
+
 void kill_process(char* pid_c);
 
 void exit_process();

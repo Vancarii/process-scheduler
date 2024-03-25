@@ -1,8 +1,6 @@
 #include "commands.h"
 #include <stdio.h>
-
 #include "../pcb.h"
-
 #include <stdlib.h>
 
 

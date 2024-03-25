@@ -158,9 +158,19 @@ void reply_command(char* pid_c, char* msg) {
     // sender should be blocked in waiting for reply queue
     List* target_queue = get_queue(pid);
 
+    // if cannot find pid then the target is the init process
     if (target_queue == NULL){
-        printf("Process with PID %d not found\n", pid);
+        // printf("Process with PID %d not found\n", pid);
+
+        found_process = init_process;
+
+        strncpy(found_process->proc_messages, msg, PROC_MESSAGES_SIZE - 1);
+        found_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';
+        printf("Reply sent to init process with message: %s\n", found_process->proc_messages);
+        printf("Previous process continues execution.\n");
+
         return;
+
     } else if (target_queue == waiting_reply_queue){
         printf("Process with PID %d is in the waiting reply queue\n", pid);
         // unblock the process from waiting reply queue

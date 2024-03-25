@@ -14,7 +14,6 @@ typedef struct {
     int pid;
     int priority;
     ProcessState state;
-    // char messages[256];  // Adjust size as needed
     // This field can contain a message that will be printed out the next time the process is scheduled. For
     // example, when a sender is readied, you may want to put something like the following text 
     // in that field: reply received, text is: blah blah blah This field should be displayed and
@@ -55,6 +54,8 @@ extern List* waiting_receive_queue;
 // static void print_process_info(PCB* pcb);
 
 bool find_pid(void* curr_PCB, void* comparisonArg);
+
+void print_process_info(PCB* pcb);
 
 void print_all_processes();
 

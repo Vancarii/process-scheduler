@@ -1,18 +1,34 @@
 #ifndef _COMMANDS_H_
 #define _COMMANDS_H_
 
+// create a process and put it on the appropriate ready Q. 
+// reports success or failure, the pid of the created process on success.
 void create_process(char* params);
 
+// Copy the currently running process and put it on the ready Q corresponding to the
+// original process' priority. Attempting to Fork the "init" process (see below) should
+// fail. 
+// reports: success or failure, the pid of the resulting (new) process on success.
 void fork_process();
 
+// kill the named process and remove it from the system.
+// action taken as well as success or failure.
 void kill_process(char* pid_c);
 
+// kill the currently running process.
+// process scheduling information (eg. which process now gets
+// control of the CPU) 
 void exit_process();
 
+// time quantum of running process expires
+// action taken (eg. process scheduling information)
 void quantum_command();
 
+// dump complete state information of process to
+// screen (this includes process status and anything else you can think of)
 void proc_info_command(char* pid_c);
 
+// display all process queues and their contents
 void total_info_command();
 
 // parameters

@@ -36,11 +36,12 @@ PCB* find_next_process() {
         return init_process;
     } else {
         next_process->state = RUNNING;
+        init_process->state = READY;
     }
     return next_process;
 }
 
-static void print_process_info(PCB* pcb){
+void print_process_info(PCB* pcb){
     printf("________________________\n");
     printf("PID: %d\n", pcb->pid);
     printf("Priority: %d\n", pcb->priority);
@@ -283,6 +284,7 @@ void pcb_init_process(){
     init_process->pid = init_process_pid;
 
     current_process = init_process;
+    current_process->state = RUNNING;
     // set the current running process to the initial process
     // current_process = initProcess;
 

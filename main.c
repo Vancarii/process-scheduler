@@ -15,6 +15,13 @@ void initializeSimulation();
 void handleCommand(char* command);
 void cleanupSimulation();
 
+// When a process is created, it is placed in the ready queue 
+// if the process created is placed in a higher queue than the current running process
+// it does not stop the current process from running
+// only if the current process is kicked using Q (quantum), then the higher priority process
+// will run
+
+
 int main() {
     char input[MAX_INPUT_LENGTH];
 

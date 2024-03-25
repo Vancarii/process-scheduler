@@ -23,7 +23,11 @@ void create_process(char* params){
         printf("Failed to append process %d to ready queue with priority %d\n", new_pcb->pid, new_pcb->priority);
         return;
     } else {
-        current_process = find_next_process();
+        // means theres no process in the queues, so make this new process run
+        // else dont do anything and let current process run
+        if (current_process == init_process){
+            current_process = find_next_process();
+        }
         printf("Process created with PID [%d] and priority %d\n", new_pcb->pid, new_pcb->priority);
     }
 

@@ -42,21 +42,20 @@ PCB* find_next_process() {
 }
 
 void print_process_info(PCB* pcb){
-    printf("________________________\n");
-    printf("PID: %d\n", pcb->pid);
-    printf("Priority: %d\n", pcb->priority);
+    printf("--------------------------------------------------------------------\n");
+    printf("PID: %d | ", pcb->pid);
+    printf("Priority: %d | ", pcb->priority);
 
     if (pcb->state == 0){
-        printf("State: Running\n");
+        printf("State: Running | ");
     } else if (pcb->state == 1){
-        printf("State: Ready\n");
+        printf("State: Ready | ");
     } else if (pcb->state == 2){
-        printf("State: Blocked\n");
-    } else {
-        printf("State: Unknown\n");
-    }
+        printf("State: Blocked | ");
+    } 
+
     printf("Message: %s\n", pcb->proc_messages);
-    printf("________________________\n\n");
+    printf("--------------------------------------------------------------------\n");
 }
 
 void print_all_processes() {

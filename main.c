@@ -25,13 +25,32 @@ void cleanupSimulation();
 int main() {
     char input[MAX_INPUT_LENGTH];
 
-    printf("Process Scheduling Simulation\n");
+    printf("\nPROCESS SCHEDULING SIMULATION\n");
     
     initializeSimulation();
 
     printf("_____________________________________\n");
     
-    printf("Enter command: \n\n'C' for Create\n'F' for Fork\n'K' for Kill\n'E' for Exit\n'Q' for Quantum\n'S' for Send\n'R' for Recieve\n'Y' for Reply\n'N' for New Semaphore\n'P' for Semaphore P\n'V' for Semaphore V\n'I' for ProcInfo\n'T' for TotalInfo\n\nor 'exit' to quit:\n");
+    printf(
+        "|  \n"
+        "|  Commands: \n"
+        "|  \n"
+        "|  'C' for Create\n"
+        "|  'F' for Fork\n"
+        "|  'K' for Kill\n"
+        "|  'E' for Exit\n"
+        "|  'Q' for Quantum\n"
+        "|  'S' for Send\n"
+        "|  'R' for Recieve\n"
+        "|  'Y' for Reply\n"
+        "|  'N' for New Semaphore\n"
+        "|  'P' for Semaphore P\n"
+        "|  'V' for Semaphore V\n"
+        "|  'I' for ProcInfo\n"
+        "|  'T' for TotalInfo\n"
+        "|_____________________________________\n"
+    );
+
 
     while (1) {
         printf("\ncommand > ");  // Prompt for input
@@ -42,11 +61,6 @@ int main() {
 
         // Remove newline character if present
         input[strcspn(input, "\n")] = 0;
-
-        // Check for 'exit' command to break the loop
-        if (strcmp(input, "exit") == 0) {
-            break;
-        }
 
         handleCommand(input);
     }

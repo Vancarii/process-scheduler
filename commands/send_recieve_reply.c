@@ -5,6 +5,7 @@
 #include <string.h>
 
 // current decision is to not allow any process to send more than one message
+// also we assume that we cannot send messages to blocked processes
 
 // parameters
 // pid (pid of process to send message to), 
@@ -22,6 +23,31 @@ void send_command(char* pid_c, char* msg) {
 
     // pid of the process to find and send message to
     int pid = atoi(pid_c);
+
+    // if sender is init process
+        // means theres no other process in the ready queues
+        // check if target is the init process
+        // if so, copy message over
+        // else, return error theres no other processes
+
+    // else if there are other processes do the rest
+    if (current_process == init_process){
+        // check if target is the init process
+        if (pid == init_process_pid){
+            // Remove newline character if present
+            msg[strcspn(msg, "\n")] = 0;
+            strncpy(init_process->proc_messages, msg, PROC_MESSAGES_SIZE - 1);
+            init_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';
+            printf("Message sent to init process with message: %s\n", init_process->proc_messages);
+            return;
+        } else {
+            printf("No processes in any ready queue. Failed to send message to pid: %d\n", pid);
+            return;
+        }
+
+    } 
+
+    // current is not init, so there are other processes, so we can send messages
 
     PCB* found_process = NULL;
 
@@ -55,6 +81,7 @@ void send_command(char* pid_c, char* msg) {
             return;
         }
 
+        msg[strcspn(msg, "\n")] = 0;
         // if the process is found, set the message
         strncpy(found_process->proc_messages, msg, PROC_MESSAGES_SIZE - 1);
         found_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';

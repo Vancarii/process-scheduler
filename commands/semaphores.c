@@ -40,7 +40,7 @@ void new_semaphore_command(char* semaphore_id, char* initial_value) {
 // action taken (blocked or not) as well as success or failure.
 void semaphore_p_command(char* semaphore_id) {
 
-    // do checks for the init process
+    // do checks to see if current is init
 
     int semID = atoi(semaphore_id);
 
@@ -53,16 +53,30 @@ void semaphore_p_command(char* semaphore_id) {
 
         if (semaphores[semID].sem < 0) {
 
-            current_process->state = BLOCKED;
-            if (List_append(semaphores[semID].waited_processes, current_process) == -1) {
+            // current_process->state = BLOCKED;
+            List* target_queue = get_queue(current_process->pid);
+            if (target_queue == NULL) {
+                printf("Failed to get queue for process %d\n", current_process->pid);
+                return;
+            }
+            List_first(target_queue);
+            PCB* blocked_process = List_remove(target_queue);
+
+            if (List_append(semaphores[semID].waited_processes, blocked_process) == -1) {
                 printf("Failed to append process to semaphore wait list\n");
                 return;
             }
-            printf("Process %d blocked on semaphore %d\n", current_process->pid, semID);
+            printf("Process %d blocked on semaphore %d\n", blocked_process->pid, semID);
+            blocked_process->state = BLOCKED;
+
+            printf("Successfully completed P operation on semaphore %d\n", semID);
+
             current_process = find_next_process();
         } else {
-            printf("Process %d successfully completed P operation on semaphore %d\n", current_process->pid, semID);
+            printf("Successfully completed P operation on semaphore %d\n", semID);
         }
+
+        
     }
 }
 
@@ -72,7 +86,7 @@ void semaphore_p_command(char* semaphore_id) {
 // success or failure.
 void semaphore_v_command(char* semaphore_id) {
 
-    // do checks for the init process
+    // do checks if current is init process
 
     
     int semID = atoi(semaphore_id);
@@ -91,10 +105,13 @@ void semaphore_v_command(char* semaphore_id) {
                 printf("Failed to remove process from semaphore wait list\n");
                 return;
             }
-            unblocked_process->state = READY;
-            printf("Process %d unblocked from semaphore %d\n", unblocked_process->pid, semID);
+
+            printf("Successfully completed V operation on semaphore %d\n", semID);
+
+
+            enqueue_process(unblocked_process);
         } else {
-            printf("Process %d successfully completed V operation on semaphore %d\n", current_process->pid, semID);
+            printf("Successfully completed V operation on semaphore %d\n", semID);
         }
     }
 }

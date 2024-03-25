@@ -18,7 +18,8 @@ List* waiting_receive_queue;
 sem semaphores[5];
 
 // find the next process to run
-// if there are no processes in any of the ready queues, return NULL
+// if there are no processes in any of the ready queues, make init
+// process the current process
 PCB* find_next_process() {
     PCB* next_process = NULL;
     for (int i = 0; i < 3; i++) {
@@ -28,8 +29,11 @@ PCB* find_next_process() {
         }
     }
     if (next_process == NULL){
-        printf("No processes in any of the ready queues\n");
-        return NULL;
+        printf("No other processes in any of the ready queues. Running init process...\n");
+        current_process = init_process;
+        current_process->state = RUNNING;
+
+        return init_process;
     } else {
         next_process->state = RUNNING;
     }
@@ -55,6 +59,13 @@ static void print_process_info(PCB* pcb){
 }
 
 void print_all_processes() {
+
+    printf("\ninit process:\n");
+    print_process_info(init_process);
+
+    printf("\n[current running process pid: %d]\n", current_process->pid);
+
+
     List* q_print;
     PCB* pcb;
     for (int i = 0; i < 3; i++) {
@@ -69,7 +80,7 @@ void print_all_processes() {
         }
     }
 
-    printf("Waiting Reply Queue\n");
+    printf("\nWaiting Reply Queue\n");
     q_print = waiting_reply_queue;
     List_first(q_print);
     // PCB* pcb;
@@ -78,7 +89,7 @@ void print_all_processes() {
         List_next(q_print);
     }
 
-    printf("Waiting Recieve Queue\n");
+    printf("\nWaiting Recieve Queue\n");
     q_print = waiting_receive_queue;
     List_first(q_print);
     // PCB* pcb;
@@ -87,11 +98,31 @@ void print_all_processes() {
         List_next(q_print);
     }
 
+    // print all semaphore waiting lists
+    for (int i = 0; i < 5; i++) {
+        
+        if (semaphores[i].waited_processes == NULL){
+            printf("Semaphore %d has not been created.\n", i);
+        } else {
+            printf("\nSemaphore %d\n", i);
+            q_print = semaphores[i].waited_processes;
+            List_first(q_print);
+            // PCB* pcb;
+            while ((pcb = List_curr(q_print)) != NULL) {
+                print_process_info(pcb);
+                List_next(q_print);
+            }
+
+            List_first(q_print);
+        }
+    }
+
     List_first(ready_queue[0]);
     List_first(ready_queue[1]);
     List_first(ready_queue[2]);
     List_first(waiting_reply_queue);
     List_first(waiting_receive_queue);
+
 }
 
 // finds a queue to place process
@@ -99,11 +130,29 @@ void print_all_processes() {
 // the only difference than List_append is that we dont know which queue the process
 // is going in, so we try all 3 from the highest priority until it can go in
 // returns the queue it was placed in
+
+// we have to also check if the queues are all empty, meaning the init process is running
+// if so, make the process that is enqueued to start running
 int enqueue_process(PCB* process) {
 
+    // if all queues are empty, make the process the current process
+    if (current_process == init_process) {
+        current_process = process;
+        if (List_append(ready_queue[0], process) == 0) {
+            printf("Process %d is now running\n", process->pid);
+            process->state = RUNNING;
+            process->priority = 0;
+        }
+
+        init_process->state = READY;
+
+        return 0;
+    }
+
+    // look for the first available queue to place the process
     for (int i = 0; i < 3; i++) {
         if (List_append(ready_queue[i], process) == 0) {
-            printf("Process %d enqueued in ready queue %d\n", process->pid, i);
+            // printf("Process %d enqueued in ready queue %d\n", process->pid, i);
             process->state = READY;
             process->priority = i;
             return i;
@@ -233,6 +282,7 @@ void pcb_init_process(){
     init_process = create_PCB(0);
     init_process->pid = init_process_pid;
 
+    current_process = init_process;
     // set the current running process to the initial process
     // current_process = initProcess;
 

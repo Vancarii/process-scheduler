@@ -42,6 +42,14 @@ PCB* find_next_process() {
 }
 
 void print_process_info(PCB* pcb){
+    if (pcb->state == RUNNING){
+        printf("\033[0;32m"); 
+    } else if (pcb->state == READY) {
+        printf("\033[0;35m"); 
+    } else {
+        printf("\033[0;31m"); 
+        
+    }
     printf("--------------------------------------------------------------------\n");
     printf("PID: %d | ", pcb->pid);
     printf("Priority: %d | ", pcb->priority);
@@ -56,15 +64,15 @@ void print_process_info(PCB* pcb){
 
     printf("Incoming Message: %s\n", pcb->proc_messages);
     printf("--------------------------------------------------------------------\n");
+
+    printf("\033[0;0m"); 
+
 }
 
 void print_all_processes() {
 
     printf("\ninit process:\n");
     print_process_info(init_process);
-
-    printf("\n[current running process pid: %d]\n", current_process->pid);
-
 
     List* q_print;
     PCB* pcb;
@@ -73,7 +81,6 @@ void print_all_processes() {
         printf("\nReady Queue %d\n", i);
         List_first(q_print);
         while ((pcb = List_curr(q_print)) != NULL) {
-            // printf("PID: %d, Priority: %d\n", pcb->pid, pcb->priority);
             print_process_info(pcb);
             
             List_next(q_print);
@@ -83,7 +90,6 @@ void print_all_processes() {
     printf("\nWaiting Reply Queue\n");
     q_print = waiting_reply_queue;
     List_first(q_print);
-    // PCB* pcb;
     while ((pcb = List_curr(q_print)) != NULL) {
         print_process_info(pcb);
         List_next(q_print);
@@ -92,7 +98,6 @@ void print_all_processes() {
     printf("\nWaiting Recieve Queue\n");
     q_print = waiting_receive_queue;
     List_first(q_print);
-    // PCB* pcb;
     while ((pcb = List_curr(q_print)) != NULL) {
         print_process_info(pcb);
         List_next(q_print);
@@ -116,6 +121,10 @@ void print_all_processes() {
             List_first(q_print);
         }
     }
+
+    printf("\033[0;33m"); 
+    printf("\n[current running process pid: %d]\n", current_process->pid);
+    printf("\033[0;0m"); 
 
     List_first(ready_queue[0]);
     List_first(ready_queue[1]);

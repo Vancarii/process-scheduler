@@ -10,7 +10,6 @@
 #define MAX_INPUT_LENGTH 100
 
 
-// Forward declarations of functions
 void initializeSimulation();
 void handleCommand(char* command);
 void cleanupSimulation();
@@ -53,9 +52,11 @@ int main() {
 
 
     while (1) {
-        printf("\ncommand > ");  // Prompt for input
+        //Set the text to the color green
+        printf("\033[0;34m"); 
+        printf("\ncommand > ");
+        printf("\033[0m"); 
         if (fgets(input, MAX_INPUT_LENGTH, stdin) == NULL) {
-            // Handle error or end-of-file
             break;
         }
 
@@ -82,7 +83,9 @@ void handleCommand(char* command) {
 
     // Check if the command string is exactly 1 character long
     if (strlen(command) != 1) {
+        printf("\033[0;31m");
         printf("Invalid command. Please enter a single character command.\n");
+        printf("\033[0;0m");
         return;
     }
 
@@ -93,7 +96,9 @@ void handleCommand(char* command) {
          // Handle 'Create' command
             puts("Creating a new process...");
             char pri[2];
-            printf("Enter the priority (0 = high ; 1 = normal ; 2 = low): ");
+            printf("\033[0;34m"); 
+            printf("Enter the priority (0 = high ; 1 = normal ; 2 = low) > ");
+            printf("\033[0;0m"); 
 
             // size of 2 since 1 integer is expected plus null termination
             if (fgets(pri, 2, stdin) == NULL) {
@@ -110,7 +115,9 @@ void handleCommand(char* command) {
         case 'K':
             puts("Killing a process...");
             char pid[5];
-            printf("Enter the PID of the process to kill: ");
+            printf("\033[0;34m"); 
+            printf("Enter the PID of the process to kill > ");
+            printf("\033[0;0m"); 
 
             if (fgets(pid, 5, stdin) == NULL) {
                 break;
@@ -128,16 +135,21 @@ void handleCommand(char* command) {
             quantum_command();   
             break;
         case 'S':
-            // puts("sending a message...");
+            puts("sending a message...");
             char pid_send[5];
-            printf("Enter the PID of the process to send a message to: ");
+            
+            printf("\033[0;34m"); 
+            printf("Enter the PID of the process to send a message to > ");
+            printf("\033[0;0m"); 
 
             if (fgets(pid_send, 5, stdin) == NULL) {
                 break;
             }
 
             char send_msg[41];
-            printf("Enter your message (max. 40 characters): ");
+            printf("\033[0;34m"); 
+            printf("Enter your message (max. 40 characters) > ");
+            printf("\033[0;0m"); 
 
             if (fgets(send_msg, 41, stdin) == NULL) {
                 break;
@@ -152,17 +164,20 @@ void handleCommand(char* command) {
         
             break;
         case 'Y':
-
-            // puts("sending a message...");
+            puts("replying to a process...");
             char pid_reply[5];
-            printf("Enter the PID of the process to reply to: ");
+            printf("\033[0;34m"); 
+            printf("Enter the PID of the process to reply to > ");
+            printf("\033[0;0m"); 
 
             if (fgets(pid_reply, 5, stdin) == NULL) {
                 break;
             }
 
             char reply_msg[41];
-            printf("Enter your message (max. 40 characters): ");
+            printf("\033[0;34m"); 
+            printf("Enter your message (max. 40 characters) > ");
+            printf("\033[0;0m"); 
 
             if (fgets(reply_msg, 41, stdin) == NULL) {
                 break;
@@ -174,7 +189,9 @@ void handleCommand(char* command) {
         case 'N':
 
             char sem_id[2];
-            printf("Enter the semaphore id (0 to 4): ");
+            printf("\033[0;34m"); 
+            printf("Enter the semaphore id (0 to 4) > ");
+            printf("\033[0;0m"); 
 
             if (fgets(sem_id, 2, stdin) == NULL) {
                 break;
@@ -184,7 +201,9 @@ void handleCommand(char* command) {
             while ((ch_n = getchar()) != '\n' && ch_n != EOF);
 
             char sem_val[10];
-            printf("Enter your semaphore initial value (0 or higher): ");
+            printf("\033[0;34m"); 
+            printf("Enter your semaphore initial value (0 or higher) > ");
+            printf("\033[0;0m"); 
 
             if (fgets(sem_val, 10, stdin) == NULL) {
                 break;
@@ -196,7 +215,9 @@ void handleCommand(char* command) {
         case 'P':
 
             char sem_p_id[2];
-            printf("Enter the semaphore id (0 to 4): ");
+            printf("\033[0;34m");
+            printf("Enter the semaphore id (0 to 4) > ");
+            printf("\033[0;0m");
 
             if (fgets(sem_p_id, 2, stdin) == NULL) {
                 break;
@@ -211,7 +232,9 @@ void handleCommand(char* command) {
         case 'V':
 
             char sem_v_id[2];
-            printf("Enter the semaphore id (0 to 4): ");
+            printf("\033[0;34m");
+            printf("Enter the semaphore id (0 to 4) > ");
+            printf("\033[0;0m");
 
             if (fgets(sem_v_id, 2, stdin) == NULL) {
                 break;
@@ -226,7 +249,9 @@ void handleCommand(char* command) {
         case 'I':
             puts("Retrieving process info...");
             char pid_i[2];
+            printf("\033[0;34m");
             printf("enter the process pid: ");
+            printf("\033[0;0m");
 
             // size of 2 since 1 integer is expected plus null termination
             if (fgets(pid_i, 2, stdin) == NULL) {
@@ -243,7 +268,9 @@ void handleCommand(char* command) {
             total_info_command();
             break;    
         default:
+            printf("\033[0;31m");
             printf("command not found. Please enter command from the list above.\n");
+            printf("\033[0;0m");
     }
 }
 

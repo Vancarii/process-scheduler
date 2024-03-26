@@ -5,17 +5,15 @@
 #include <string.h>
 
 // current decision is to not allow any process to send more than one message
+// processes can send messages to themselves, they do not get blocked 
+
+// target process that gets message continues executing
 
 // if the send command targets a process in the waiting recieve queue, 
 // the waiting process will get unblocked and enqueued to the right queue
-// but does not recieve the message until it gets the cpu and starts running
+// but does not recieve the message until it gets the cpu and starts running with R
 // the sender gets blocked on the waiting reply queue
 
-// parameters
-// pid (pid of process to send message to), 
-// char *msg (null terminated message string, 40 char max)
-// action: send a message to another process - block until reply
-// reports: success or failure, scheduling information, and reply source and text (once reply arrives)
 void send_command(char* pid_c, char* msg) {
 
     // null check
@@ -24,22 +22,25 @@ void send_command(char* pid_c, char* msg) {
         return;
     }
 
+    // Remove newline character if present
+    msg[strcspn(msg, "\n")] = 0;
 
+ 
     // pid of the process to find and send message to
     int pid = atoi(pid_c);
 
-    // if sender is init process
-        // means theres no other process in the ready queues
-        // check if target is the init process
-        // if so, copy message over
-        // else, return error theres no other processes
+    // sending to self
+    if (current_process->pid == pid){
+        strncpy(current_process->proc_messages, msg, PROC_MESSAGES_SIZE - 1);
+        current_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';
+        printf("Message sent to current process with message: %s\n", current_process->proc_messages);
+        return;
+    }   
 
     // else if there are other processes do the rest
     if (current_process == init_process){
         // check if target is the init process
         if (pid == init_process_pid){
-            // Remove newline character if present
-            msg[strcspn(msg, "\n")] = 0;
             strncpy(init_process->proc_messages, msg, PROC_MESSAGES_SIZE - 1);
             init_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';
             printf("Message sent to init process with message: %s\n", init_process->proc_messages);
@@ -47,8 +48,6 @@ void send_command(char* pid_c, char* msg) {
         } 
 
     } 
-
-    // current is not init, so there are other processes, so we can send messages
 
     PCB* found_process = NULL;
 
@@ -60,34 +59,41 @@ void send_command(char* pid_c, char* msg) {
     // meaning the init process is target process
     if (target_queue == NULL){
         found_process = init_process;
+    } 
+    
+    else if (target_queue == waiting_receive_queue){
+        printf("Process with PID %d is in the waiting receive queue\n", pid);
+        // unblock the process from waiting queue
+        if ((found_process = List_remove(waiting_receive_queue)) == NULL) {
+            printf("Process with PID %d not found in waiting receive queue\n", pid);
+
+            // int queue_num = enqueue_process(found_process);
+            // printf("Process with PID %d unblocked from waiting receive queue and enqueued in ready queue %d\n", pid, queue_num);
+        }
     } else {
         found_process = List_curr(target_queue);
     }
 
-    if (target_queue == waiting_receive_queue){
-        printf("Process with PID %d is in the waiting receive queue\n", pid);
-        // unblock the process from waiting queue
-        if ((found_process = List_remove(waiting_receive_queue)) != NULL) {
-            int queue_num = enqueue_process(found_process);
-            printf("Process with PID %d unblocked from waiting receive queue and enqueued in ready queue %d\n", pid, queue_num);
-        }
-    } 
-
-
-    if (found_process != NULL) {
-
-        // current decision is to not allow any process to send more than one message
-        if (found_process->proc_messages[0] != '\0') {
-            printf("Message already exists for process with PID %d\n", pid);
+    if (found_process == NULL) {
+            printf("Process with PID %d not found\n", pid);
             return;
-        }
+    }
+ 
 
-        msg[strcspn(msg, "\n")] = 0;
-        // if the process is found, set the message
-        strncpy(found_process->proc_messages, msg, PROC_MESSAGES_SIZE - 1);
-        found_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';
-        printf("Message sent to process with PID %d with message: %s\n", pid, found_process->proc_messages);
+    // current decision is to not allow any process to send more than one message
+    if (found_process->proc_messages[0] != '\0') {
+        printf("Message already exists for process with PID %d\n", pid);
+        return;
+    }
 
+    msg[strcspn(msg, "\n")] = 0;
+    // if the process is found, set the message
+    strncpy(found_process->proc_messages, msg, PROC_MESSAGES_SIZE - 1);
+    found_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';
+    printf("Message sent to process with PID %d with message: %s\n", pid, found_process->proc_messages);
+
+
+    if (current_process != init_process){
 
         // block until reply
         current_process->state = BLOCKED;
@@ -101,9 +107,17 @@ void send_command(char* pid_c, char* msg) {
             return;
         }
         
-        current_process = find_next_process();
+        // current_process = find_next_process();
+
     }
-    
+
+    if (target_queue == waiting_receive_queue){
+        printf("Process with PID %d unblocked from waiting receive queue.\n", pid);
+        enqueue_process(found_process);
+    }
+
+    current_process = find_next_process();
+
 
 }
 
@@ -153,8 +167,18 @@ void recieve_command() {
 // reports success or failure
 void reply_command(char* pid_c, char* msg) {
 
+    // null check
+    if (msg == NULL || msg[0] == '\0') {
+        printf("Message is empty\n");
+        return;
+    }
+
+
     // pid of the process to find and send message to
     int pid = atoi(pid_c);
+
+    // Remove newline character if present
+    msg[strcspn(msg, "\n")] = 0;
 
     PCB* found_process = NULL;
 

@@ -8,38 +8,7 @@
 
 void exit_process(){
 
-    printf("currently running process pid: %d\n", current_process->pid);
-
-    // check if target is init process
-    // if it is, then that means there are no other processes
-    // check if there are any blocked processes
-    // if not, cleanup and exit program
-
-    // else if there are blocked processes ,
-    // throw error that cannot exit yet
-
-    //else if not init process
-    // find the process and queue that current process is in
-    // remove it from the queue
-    // free the process
-
-    // // check if there are any incoming messages
-    // if (current_process->proc_messages[0] != '\0'){
-    //     char y_n[2];
-    //     printf("\033[0;33m");
-    //     printf("PROCESS HAS INCOMING MESSAGES. ARE YOU SURE YOU WANT TO EXIT? (Y/N): ");
-    //     printf("\033[0;0m");
-
-    //     // size of 2 since 1 integer is expected plus null termination
-    //     if (fgets(y_n, 2, stdin) == NULL) {
-    //         puts("invalid input\n");
-    //     }
-
-    //     if (strcmp(y_n, "N") == 0){
-    //         return;
-    //     }
-
-    // }
+    // printf("currently running process pid: %d\n", current_process->pid);
 
     if (current_process == init_process){
               
@@ -80,11 +49,12 @@ void exit_process(){
                 return;
             }
 
-            printf("Process %d has been successfully exited.\n", removed_proc->pid);
+            printf("Process %d has successfully been exited.\n", removed_proc->pid);
             free_PCB(removed_proc);
 
             current_process = find_next_process();
 
+            printf("Process %d now has the CPU.\n", current_process->pid);
         }
 
     }

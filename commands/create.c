@@ -28,9 +28,8 @@ void create_process(char* params){
         if (current_process == init_process){
             current_process = find_next_process();
         }
-        printf("Process created with PID [%d] and priority %d\n", new_pcb->pid, new_pcb->priority);
+        printf("\nProcess successfully created with PID [%d]\n", new_pcb->pid);
+        print_process_info(new_pcb);
     }
-
-    printf("ready queue [%d] count: %d\n", new_pcb->priority, ready_queue[priority]->count);
 
 }

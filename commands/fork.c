@@ -33,7 +33,8 @@ void fork_process() {
         printf("Failed to append process %d to ready queue with priority %d\n", forked_process->pid, forked_process->priority);
         return;
     } else {
-        printf("Process created with PID [%d] and priority %d\n", forked_process->pid, forked_process->priority);
+        printf("New forked process created with new PID [%d]\n", forked_process->pid);
+        print_process_info(forked_process);
     }
 
 }

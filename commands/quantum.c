@@ -4,9 +4,14 @@
 #include "commands.h"
 #include <stdlib.h>
 
+// Current design decision:
+// We will dequeue the process and enqueue it back to the ready queue of original queue
+// since we are enqueue back to original queue, if the next running process is lower in the queue,
+// and the process that was pre-empted is enqueued back to the beginning of the higher priority 
+// queue, then that process gets the cpu again since it is still higher priority
+
 // time quantum of currently running process expires.
 // action taken (eg. process scheduling information)
-// im guessing we dequeue the process and enqueue it back to the ready queue
 //  Quantum (Q) is the ONLY way to signal that the time quantum for round robin scheduling has expired
 // - when this occurs we must choose the next process to execute from the appropriate ready queue
 // (or just the init process if no processes are ready)
@@ -31,29 +36,22 @@ void quantum_command() {
             return;
         } else {
             
-            current_process = find_next_process();
             
             removed_proc->state = READY;
             if (List_append(ready_queue[removed_proc->priority], removed_proc) == -1) {
                 printf("Failed to append process %d to ready queue with priority %d\n", removed_proc->pid, removed_proc->priority);
                 return;
-            } else {
-                printf("Process %d has been successfully enqueued to ready queue with priority %d\n", removed_proc->pid, removed_proc->priority);
             }
+
+
+            printf("Process %d has been successfully pre-empted and enqueued back to priority queue %d\n", removed_proc->pid, removed_proc->priority);
+
+            current_process = find_next_process();
+            printf("Process %d now has the CPU.\n", current_process->pid);
+            
         }
     } else {
         printf("Process %d is not in any queue. Failed to execute quantum command.\n", current_process->pid);
     }
-
-    // have the current process point to the next process in the queue
-    // current_process = List_first(ready_queue[0]);
-    // if (current_process == NULL) {
-    //     current_process = List_first(ready_queue[1]);
-    // }
-    // if (current_process == NULL) {
-    //     current_process = List_first(ready_queue[2]);
-    // }
-    // print_all_queues();
-
 
 }

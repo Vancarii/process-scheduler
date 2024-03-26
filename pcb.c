@@ -111,7 +111,7 @@ void print_all_processes() {
     for (int i = 0; i < 5; i++) {
         
         if (semaphores[i].waited_processes == NULL){
-            printf("Semaphore %d has not been created.\n", i);
+            printf("\nSemaphore %d has not been created.\n", i);
         } else {
             printf("\nSemaphore %d\n", i);
             q_print = semaphores[i].waited_processes;

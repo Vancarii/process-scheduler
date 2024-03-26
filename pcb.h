@@ -19,6 +19,7 @@ typedef struct {
     // in that field: reply received, text is: blah blah blah This field should be displayed and
     // cleared the next time the process runs. 
     char* proc_messages;
+    int sender_pid;
 } PCB;
 
 //  semaphore data struct
@@ -31,6 +32,7 @@ typedef struct sem {
 extern sem semaphores[5];
 
 #define UNUSED_SEMAPHORE -999
+#define UNUSED_PID -999
 
 #define PROC_MESSAGES_SIZE 41
 

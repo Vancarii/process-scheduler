@@ -50,7 +50,7 @@ void print_process_info(PCB* pcb){
         printf("\033[0;31m"); 
         
     }
-    printf("--------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------------------\n");
     printf("PID: %d | ", pcb->pid);
     printf("Priority: %d | ", pcb->priority);
 
@@ -61,9 +61,13 @@ void print_process_info(PCB* pcb){
     } else if (pcb->state == 2){
         printf("State: Blocked | ");
     } 
-
-    printf("Incoming Message: %s\n", pcb->proc_messages);
-    printf("--------------------------------------------------------------------\n");
+    printf("Incoming Message: %s | ", pcb->proc_messages);
+    if (pcb->sender_pid != UNUSED_PID) {
+        printf("message sender PID: %d\n", pcb->sender_pid);
+    } else {
+        printf("message sender PID: \n");
+    }
+    printf("------------------------------------------------------------------------------------\n");
 
     printf("\033[0;0m"); 
 
@@ -243,6 +247,7 @@ PCB *create_PCB(int priority) {
     newPCB->state = READY;
     newPCB->priority = priority;
     newPCB->proc_messages = ((char*) malloc(41 * sizeof(char)));
+    newPCB->sender_pid = UNUSED_PID;
     if (newPCB->proc_messages == NULL) {
         fprintf(stderr, "Failed to allocate memory for PCB messages\n");
         exit(1);

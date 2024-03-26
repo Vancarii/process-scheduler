@@ -33,7 +33,8 @@ void send_command(char* pid_c, char* msg) {
     if (current_process->pid == pid){
         strncpy(current_process->proc_messages, msg, PROC_MESSAGES_SIZE - 1);
         current_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';
-        printf("Message sent to current process with message: %s\n", current_process->proc_messages);
+        printf("Message sent to current running process [%d] with message: %s\n", current_process->pid, current_process->proc_messages);
+        current_process->sender_pid = current_process->pid;
         return;
     }   
 
@@ -43,7 +44,8 @@ void send_command(char* pid_c, char* msg) {
         if (pid == init_process_pid){
             strncpy(init_process->proc_messages, msg, PROC_MESSAGES_SIZE - 1);
             init_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';
-            printf("Message sent to init process with message: %s\n", init_process->proc_messages);
+            printf("Message sent to init process [%d] with message: %s\n", init_process->pid, init_process->proc_messages);
+            init_process->sender_pid = init_process->pid;
             return;
         } 
 
@@ -66,9 +68,6 @@ void send_command(char* pid_c, char* msg) {
         // unblock the process from waiting queue
         if ((found_process = List_remove(waiting_receive_queue)) == NULL) {
             printf("Process with PID %d not found in waiting receive queue\n", pid);
-
-            // int queue_num = enqueue_process(found_process);
-            // printf("Process with PID %d unblocked from waiting receive queue and enqueued in ready queue %d\n", pid, queue_num);
         }
     } else {
         found_process = List_curr(target_queue);
@@ -90,8 +89,8 @@ void send_command(char* pid_c, char* msg) {
     // if the process is found, set the message
     strncpy(found_process->proc_messages, msg, PROC_MESSAGES_SIZE - 1);
     found_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';
-    printf("Message sent to process with PID %d with message: %s\n", pid, found_process->proc_messages);
-
+    printf("Message sent from PID %d to process with PID %d with message: %s\n", current_process->pid, pid, found_process->proc_messages);
+    found_process->sender_pid = current_process->pid;
 
     if (current_process != init_process){
 
@@ -139,6 +138,7 @@ void recieve_command() {
     if (current_process->proc_messages[0] != '\0') {
         printf("Message successfully received: %s\n", current_process->proc_messages);
         printf("Process continues execution.\n");
+        current_process->sender_pid = UNUSED_PID;
         current_process->proc_messages[0] = '\0';
     } else {
         // block until message arrives
@@ -194,6 +194,7 @@ void reply_command(char* pid_c, char* msg) {
         strncpy(found_process->proc_messages, msg, PROC_MESSAGES_SIZE - 1);
         found_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';
         printf("Reply sent to init process with message: %s\n", found_process->proc_messages);
+        found_process->sender_pid = current_process->pid;
         printf("Previous process continues execution.\n");
 
         return;
@@ -212,6 +213,7 @@ void reply_command(char* pid_c, char* msg) {
             strncpy(found_process->proc_messages, msg, PROC_MESSAGES_SIZE - 1);
             found_process->proc_messages[PROC_MESSAGES_SIZE - 1] = '\0';
             printf("Reply sent to sender process with PID %d with message: %s\n", pid, found_process->proc_messages);
+            found_process->sender_pid = current_process->pid;
             printf("Process unblocked and placed into ready queue. Previous process continues execution unless it was init process.\n");
         }
 
